@@ -31,9 +31,16 @@ Omnifocus stores your data in multiple zipped XML files for quick synchronizatio
 But it also stores a cache on your data in a SQLite database at:
 > /Users/[username]/Library/Caches/com.omnigroup.OmniFocus/OmniFocusDatabase2
 
-This script reads the SQLite database and displays it on a local web browser.
-
-If Omnifocus changes its sqlite database structure, it could break this script.
+This script reads the SQLite database and displays it on a local web browser.  That database has the following tables:
+* Attachment
+* Context
+* Folder
+* ODOMetadata
+* Perspective
+* ProjectInfo (which stores Project info, but project names and other data are also stored in the Task table)
+* Setting
+* Task (which stores a persistentIdentifier for each task along with dateAdded, dateCompleted, dateDue, dateToStart, inInBox and other info)
+If Omnifocus changes its SQLite database structure, it could break this script.
 
 ### Code Libraries Used ###
 
