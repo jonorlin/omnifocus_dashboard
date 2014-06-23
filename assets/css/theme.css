@@ -1,0 +1,11 @@
+/* Custom changes to bootstrap css go here
+-------------------------------------------------- */
+.jumbotron-short {
+  padding: 30px 10px 5px 5px;
+  margin-bottom: 5px;
+  color: inherit;
+  background-color: #eee;
+}
+a {color: #000;}
+
+hr {margin: 10px 10px;}
