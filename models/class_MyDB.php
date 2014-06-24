@@ -156,10 +156,10 @@ $future = (isset($_GET["future"]) ? $_GET["future"] : '' );
 if($future == 'hide')
 {
   $show_future_tasks = " AND
-  ( date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') < date('now')
+  ( date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') <= date('now', 'localtime')
   OR Task.dateToStart ISNULL )
           AND
-  ( date(Task.dateDue + 978307200, 'unixepoch', 'localtime') < date('now')
+  ( date(Task.dateDue + 978307200, 'unixepoch', 'localtime') <= date('now', 'localtime')
   OR Task.dateDue ISNULL )
           AND
   ( Context.allowsNextAction = 1  OR Context.allowsNextAction ISNULL ) ";
