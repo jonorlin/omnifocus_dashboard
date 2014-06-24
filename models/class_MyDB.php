@@ -39,8 +39,9 @@ class MyDB extends SQLite3
    {
   $sql ="SELECT Task.name as taskName, Context.name as contextName,
   date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') AS dateToStart,
-  date(Task.dateDue + 978307200, 'unixepoch', 'localtime') AS dueDate,
-  pk, Task.persistentIdentifier as tid, ProjectTasks.name AS projectName
+  date(Task.dateDue + 978307200, 'unixepoch', 'localtime') AS dateDue,
+  pk, Task.persistentIdentifier as tid, ProjectTasks.name AS projectName,
+date(Task.dateCompleted + 978307200, 'unixepoch', 'localtime') AS dateCompleted
     FROM Task, Context, ProjectInfo
     JOIN Task AS ProjectTasks ON ProjectInfo.pk = ProjectTasks.persistentIdentifier
     WHERE Task.context = Context.persistentIdentifier
@@ -99,7 +100,7 @@ class MyDB extends SQLite3
 
 
   function get_all_tasks($t, $id, $order)
-  { // used on the home page and context and project list pages
+  { // used on the home page and actions.php pages
     // Task.ProjectInfo ISNULL insures that projects don't appear
   $filter = '';
 
@@ -146,9 +147,26 @@ case 'open':
 
 default:
 // so tasks with no context don't appear on home page
-// allowsNextAction determines tasks in on hold contexts
   $filter = " AND Context.Name != 'NULL' AND Task.dateCompleted ISNULL";
   break;
+}
+
+$future = (isset($_GET["future"]) ? $_GET["future"] : '' );
+
+if($future == 'hide')
+{
+  $show_future_tasks = " AND
+  ( date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') < date('now')
+  OR Task.dateToStart ISNULL )
+          AND
+  ( date(Task.dateDue + 978307200, 'unixepoch', 'localtime') < date('now')
+  OR Task.dateDue ISNULL )
+          AND
+  ( Context.allowsNextAction = 1  OR Context.allowsNextAction ISNULL ) ";
+}
+else
+{
+  $show_future_tasks = '';
 }
 
     $sql ="SELECT Task.name as taskName, Context.name as contextName,
@@ -170,6 +188,7 @@ ON ProjectInfo.pk = ProjectTasks.persistentIdentifier
   AND ProjectInfo.status IN ( 'active' , 'inactive')
   AND Task.ProjectInfo ISNULL
   $filter
+  $show_future_tasks
   ORDER BY ". $order;
   return $this->query($sql);
   }

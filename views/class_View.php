@@ -74,6 +74,21 @@ function table($row_names, $row_data, $ret)
 	<p class="tip">
 		<span class="label label-info">TIP!</span>  Sort multiple columns simultaneously by holding down the <kbd>Shift</kbd> key and clicking a second, third or even fourth column header
 	</p>
+
+<?php
+$future = (isset($_GET["future"]) ? $_GET["future"] : '' );
+
+if ($future == 'hide') { ?>
+
+<a href="action.php?t=<?php echo $_GET["t"];?>&amp;id=<?php echo $_GET["id"] ;?>" class="btn btn-default btn-lg active" role="button">Show future due or start actions and actions with on hold contexts</a>
+
+<?php } else {?>
+<a href="action.php?t=<?php echo $_GET["t"];?>&amp;id=<?php echo $_GET["id"] ;?>&amp;future=hide" class="btn btn-default btn-lg active" role="button">Hide future due or start actions and actions with on hold contexts</a>
+
+<?php
+}
+?>
+
   <table class="table tablesorter table-striped table-bordered table-condensed table-hover" id="mytable">
   <thead>
   <tr class="info">
