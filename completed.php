@@ -15,6 +15,6 @@ $row_names = array(
 $row_data = array('taskName', 'projectName','contextName','dateDue','dateCompleted');
 
 $view->header($page_title, $contexts_list, $projects_list,$task_count);
-$view->table($row_names, $row_data, $ret);
+$view->table_without_future_options($row_names, $row_data, $ret);
 $view->footer();
 ?>
