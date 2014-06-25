@@ -43,12 +43,13 @@ public function header($page_title, $contexts_list, $projects_list,$task_count)
 <a href="index.php">Home</a> |
 <a href="inbox.php">In Box (<?php echo $task_count["inBox"];?>)</a> |
 <a href="action.php?t=all">All Actions  (<?php echo $task_count["dateAdded"];?>)</a> |
-<a href="action.php?t=open">Open Actions (<?php echo $task_count["openTasks"];?>)</a> |
+<a href="action.php?t=open">Open (<?php echo $task_count["openTasks"];?>)</a> |
 <a href="action.php?t=startdate">By Start Dates (<?php echo $task_count["dateToStart"];?>)</a> |
 <a href="action.php?t=duedate">By Due Dates (<?php echo $task_count["dateDue"];?>)</a> |
-<a href="action.php?t=nodates">Actions No Dates (<?php echo $task_count["noDates"];?>)</a> |
+<a href="action.php?t=nodates">No Dates (<?php echo $task_count["noDates"];?>)</a> |
 <a href="folders.php">Folders</a> |
-<a href="completed.php">Completed Actions (<?php echo $task_count["dateCompleted"];?>)</a>
+<a href="completed.php">Completed (<?php echo $task_count["dateCompleted"];?>)</a> |
+<a href="stats.php">Monthly Stats</a>
 <hr />
 <strong><a href="context_list.php">Active and On Hold Contexts:</a></strong>
 <?php
@@ -185,6 +186,64 @@ while ($row = $ret->fetchArray() )
 
 <?php
 }
+
+
+function table_stats($row_names, $row_fields, $array)
+{
+  ?>
+  <p class="tip">
+    <span class="label label-info">TIP!</span>  Sort multiple columns simultaneously by holding down the <kbd>Shift</kbd> key and clicking a second, third or even fourth column header
+  </p>
+
+ <div class="col-md-4">
+
+  <table class="table tablesorter table-striped table-bordered table-condensed table-hover" id="mytable">
+  <thead>
+  <tr class="info">
+<?php
+foreach ($row_names as $row)
+{
+  echo '<th class="col-sm-' . $row["width"] . '">' . $row["name"] . "</th>";
+}
+?>
+    </tr>
+  </thead>
+  <tbody>
+<?php
+foreach ($array as $row)
+{
+// don't print empty yearmonth
+ if ($row["yearmonth"] != '')
+ {
+  echo "<tr>";
+  foreach ($row_fields as $name)
+  {
+    echo "<td>";
+    echo $row[$name];
+    echo "</td>";
+  }
+  echo "</tr>";
+}
+}
+?>
+</tbody>
+</table>
+</div>
+
+<script>
+  $(document).ready(function(){
+  $(function(){
+  $("#mytable").tablesorter({
+    theme: "blue"
+  });
+  });
+  });
+</script>
+
+<?php
+}
+
+
 
 }
 

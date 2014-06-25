@@ -21,6 +21,7 @@ A php-based tool to view Omnifocus in a local browser with better dashboard view
 * Click on an action to open it in Omnifocus
 * Counts task in In Box, Open, By Start Dates, By Due Dates and Completed Task
 * View Folders, Contexts, Projects
+* (New feature) Monthly Stats
 
 
 ### How It Works ###
@@ -40,6 +41,7 @@ This script reads the SQLite database and displays it on a local web browser.  T
 * ProjectInfo (which stores Project info, but project names and other data are also stored in the Task table)
 * Setting
 * Task (which stores a persistentIdentifier for each task along with dateAdded, dateCompleted, dateDue, dateToStart, inInBox and other info)
+
 If Omnifocus changes its SQLite database structure, it could break this script.
 
 ### Code Libraries Used ###

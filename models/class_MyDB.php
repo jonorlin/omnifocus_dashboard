@@ -17,6 +17,49 @@ class MyDB extends SQLite3
 	 return $this->query($sql);
    }
 
+
+   function get_stats()
+   {
+    $year_table = array();
+    $date_types = array('dateAdded','dateToStart','dateDue','dateCompleted');
+    foreach ($date_types as $field)
+    {
+      $$field = $this->get_single_stats($field);
+      while($row = $$field->fetchArray() )
+      {  // adds to the table such as 2014-06[dateAdded] = count
+        $year_table[$row["yearmonth"] ] [$field] = $row[$field];
+        $year_table[$row["yearmonth"] ] ["yearmonth"] = $row["yearmonth"];
+      }
+    }
+
+    // fill in 0 values for null data
+    // needed to clean up undefined index's
+    foreach($year_table as $row)
+    {
+      foreach ($date_types as $field)
+        {
+          if (!isset($row[$field]) )
+          { $year_table[$row["yearmonth"]] [$field] = 0;}
+        }
+     }
+     // sort by year-month
+     ksort($year_table);
+     return $year_table;
+  }
+
+
+   private function get_single_stats($field)
+   {
+     $sql = "SELECT
+     count($field) as $field,
+     strftime('%Y-%m',$field + 978307200, 'unixepoch','localtime') as yearmonth
+    FROM Task
+    GROUP BY yearmonth
+    ORDER BY yearmonth DESC" ;
+
+    return $this->query($sql);
+   }
+
   function count_tasks()
   { // Task.ProjectInfo IS NULL confirms no projects counted
     $sql = 'SELECT
