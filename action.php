@@ -16,8 +16,8 @@ $row_names = array(
 
 $row_data = array('taskName', 'projectName','contextName','dateToStart','dateDue');
 
-$view->header($page_title, $contexts_list, $projects_list,$task_count);
-$view->table($row_names, $row_data, $ret);
+include ('views/header.php');
+include ('views/table.php');
 
 if ($_GET["t"] == "context")
 {
@@ -26,8 +26,8 @@ if ($_GET["t"] == "context")
   {
     $ret->reset();  // since called above, $ret needs to be reset
     echo "Child Contexts";
-    $view->table($row_names, $row_data, $ret);
+    include ('views/table.php');
   }
 }
-$view->footer();
+include ('views/footer.php');
 ?>

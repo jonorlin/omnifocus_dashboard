@@ -20,6 +20,4 @@ date_default_timezone_set('America/Los_Angeles');
 // initialize the MyDB class and create $db Object
 include ("models/class_MYDB.php");
 
-// initialize the View class and create $view Object
-include ("views/class_View.php");
 ?>

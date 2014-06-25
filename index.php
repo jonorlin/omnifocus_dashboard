@@ -4,7 +4,7 @@ $page_title = 'Home Page';
 
 $tasks = $db->get_all_tasks('', '', 'contextName, taskName');
 
-$view->header($page_title, $contexts_list, $projects_list,$task_count);
+include ('views/header.php');
 ?>
 
 <div class="row">
@@ -118,5 +118,5 @@ while ($row = $tasks->fetchArray() )
    </div>
 </div>
 <?php
-$view->footer();
+include ('views/footer.php');
 ?>

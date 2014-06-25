@@ -11,7 +11,7 @@ $row_names = array(
 );
 $row_data = array('name', 'numberOfAvailableTasks', 'numberOfDueSoonTasks');
 
-$view->header($page_title, $contexts_list, $projects_list,$task_count);
-$view->table_without_future_options($row_names, $row_data, $ret);
-$view->footer();
+include ('views/header.php');
+include ('views/table_without_future_options.php');
+include ('views/footer.php');
 ?>

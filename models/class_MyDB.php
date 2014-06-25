@@ -34,6 +34,7 @@ class MyDB extends SQLite3
 
     // fill in 0 values for null data
     // needed to clean up undefined index's
+    // TODO could make this separate function
     foreach($year_table as $row)
     {
       foreach ($date_types as $field)
@@ -55,7 +56,7 @@ class MyDB extends SQLite3
      strftime('%Y-%m',$field + 978307200, 'unixepoch','localtime') as yearmonth
     FROM Task
     WHERE ProjectInfo ISNULL
-    GROUP BY yearmonth" ;
+    GROUP BY yearmonth";
 
     return $this->query($sql);
    }

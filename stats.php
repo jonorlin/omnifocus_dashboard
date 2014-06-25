@@ -13,7 +13,7 @@ $row_names = array(
 );
 $row_data = array('yearmonth', 'dateAdded', 'dateToStart', 'dateDue','dateCompleted');
 
-$view->header($page_title, $contexts_list, $projects_list,$task_count);
-$view->table_stats($row_names, $row_data, $ret);
-$view->footer();
+include ('views/header.php');
+include ('views/table_stats.php');
+include ('views/footer.php');
 ?>
