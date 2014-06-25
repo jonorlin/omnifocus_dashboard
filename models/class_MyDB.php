@@ -54,8 +54,8 @@ class MyDB extends SQLite3
      count($field) as $field,
      strftime('%Y-%m',$field + 978307200, 'unixepoch','localtime') as yearmonth
     FROM Task
-    GROUP BY yearmonth
-    ORDER BY yearmonth DESC" ;
+    WHERE ProjectInfo ISNULL
+    GROUP BY yearmonth" ;
 
     return $this->query($sql);
    }
