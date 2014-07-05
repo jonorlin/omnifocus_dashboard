@@ -21,7 +21,7 @@ include ('views/table.php');
 
 if ($_GET["t"] == "context")
 {
-  $ret = $db->get_child_contexts($_GET["id"]);
+  $ret = $db->get_child_contexts($id);
   if ($ret->fetchArray() )
   {
     $ret->reset();  // since called above, $ret needs to be reset

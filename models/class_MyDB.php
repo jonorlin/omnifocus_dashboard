@@ -142,6 +142,50 @@ date(Task.dateCompleted + 978307200, 'unixepoch', 'localtime') AS dateCompleted
  return $this->query($sql);
  }
 
+  function get_action_details($tid)
+  {
+  $sql = "SELECT *
+  FROM Task
+  WHERE Task.persistentIdentifier = '" . $tid . "'";
+  return $this->query($sql);
+  }
+
+  function get_tasks_in_date_range($firstymd,$lastymd, $type)
+  {
+    switch ($type) {
+      case 'dateDue':
+        $filter = "Task.dateCompleted ISNULL
+        AND
+        date(Task.dateDue + 978307200, 'unixepoch', 'localtime') >= '".$firstymd."'
+        AND
+        date(Task.dateDue + 978307200, 'unixepoch', 'localtime') <= '".$lastymd."'";
+        break;
+
+      case 'dateToStart':
+        $filter = "Task.dateCompleted ISNULL
+        AND
+        date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') >= '".$firstymd."'
+        AND
+        date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') <= '".$lastymd."'";
+        break;
+
+      case 'dateCompleted':
+      $filter = "
+      date(Task.dateCompleted + 978307200, 'unixepoch', 'localtime') >= '".$firstymd."'
+      AND
+      date(Task.dateCompleted + 978307200, 'unixepoch', 'localtime') <= '".$lastymd."'";
+        break;
+    }
+
+    $sql ="SELECT Task.name as taskName,
+    date(Task.dateDue + 978307200, 'unixepoch', 'localtime') as dateDue,
+    date(Task.dateToStart + 978307200, 'unixepoch', 'localtime') as dateToStart,
+    date(Task.dateCompleted + 978307200, 'unixepoch', 'localtime') as dateCompleted
+     FROM Task
+     WHERE $filter";
+
+  return $this->query($sql);
+  }
 
   function get_all_tasks($t, $id, $order)
   { // used on the home page and actions.php pages
@@ -219,7 +263,8 @@ date(Task.dateDue + 978307200, 'unixepoch', 'localtime') AS dateDue,
 date(Task.dateCompleted + 978307200, 'unixepoch', 'localtime') AS dateCompleted,
 pk, Task.persistentIdentifier as tid,
 ProjectTasks.name AS projectName,
-Context.allowsNextAction
+Context.allowsNextAction,
+Task.dateDue + 978307200 AS unixdue
    FROM Task, ProjectInfo
    LEFT JOIN Task AS ProjectTasks
 ON ProjectInfo.pk = ProjectTasks.persistentIdentifier

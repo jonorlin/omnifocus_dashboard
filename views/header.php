@@ -25,6 +25,7 @@
    <div class="container">
 <h1><?php echo SITE_NAME . " : ". $page_title;?></h1>
 <a href="index.php">Home</a> |
+<a href="calendar.php">Calendar</a> |
 <a href="inbox.php">In Box (<?php echo $task_count["inBox"];?>)</a> |
 <a href="action.php?t=all">All Actions  (<?php echo $task_count["dateAdded"];?>)</a> |
 <a href="action.php?t=open">Open (<?php echo $task_count["openTasks"];?>)</a> |

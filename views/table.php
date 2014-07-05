@@ -6,10 +6,10 @@
 $future = (isset($_GET["future"]) ? $_GET["future"] : '' );
 if ($future == 'hide') { ?>
 
-<a href="action.php?t=<?php echo $_GET["t"];?>&amp;id=<?php echo $_GET["id"] ;?>" class="btn btn-default btn-lg active" role="button">Show future due or start actions and actions with on hold contexts</a>
+<a href="action.php?t=<?php echo $_GET["t"];?>&amp;id=<?php echo $id ;?>" class="btn btn-default btn-lg active" role="button">Show future due or start actions and actions with on hold contexts</a>
 
 <?php } else {?>
-<a href="action.php?t=<?php echo $_GET["t"];?>&amp;id=<?php echo $_GET["id"] ;?>&amp;future=hide" class="btn btn-default btn-lg active" role="button">Hide future due or start actions and actions with on hold contexts</a>
+<a href="action.php?t=<?php echo $_GET["t"];?>&amp;id=<?php echo $id ;?>&amp;future=hide" class="btn btn-default btn-lg active" role="button">Hide future due or start actions and actions with on hold contexts</a>
 
 <?php
 }
@@ -36,9 +36,10 @@ foreach ($row_data as $name)
   echo "<td>";
   if ($name == 'taskName') {echo '<a href="omnifocus:///task/'. $row["tid"]. '">';}
   if ($name == 'taskName' && !is_null($row["dateCompleted"]) )
-  { echo "[completed] ";}
+  { echo '<button type="button" class="btn btn-warning btn-xs">completed</button> ';}
   echo $row[$name];
-  if ($name = 'taskName')  {echo "</a>";}
+  if ($name == 'taskName')  {echo "</a>";
+  echo '<a href="detail.php?tid=' .$row["tid"] . '"> <button type="button" class="btn btn-info btn-xs">Info</button></a>';}
   echo "</td>";
 }
 echo "</tr>";

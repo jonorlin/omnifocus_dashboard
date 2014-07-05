@@ -21,7 +21,13 @@ A php-based tool to view Omnifocus in a local browser with better dashboard view
 * Click on an action to open it in Omnifocus
 * Counts task in In Box, Open, By Start Dates, By Due Dates and Completed Task
 * View Folders, Contexts, Projects
-* (New feature) Monthly Stats
+
+#### Added in Version 1.2 ####
+* Graphs
+* Calendar view by due, start, and completed
+* View all data in a task in the database
+* Fixed some typos and bugs
+* Moved view files to individual files instead of all in one view class
 
 
 ### How It Works ###

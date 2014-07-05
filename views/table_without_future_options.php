@@ -23,7 +23,7 @@ foreach ($row_data as $name)
   echo "<td>";
   if ($name == 'taskName') {echo '<a href="omnifocus:///task/'. $row["tid"]. '">';}
   if ($name == 'taskName' && !is_null($row["dateCompleted"]) )
-  { echo "[completed] ";}
+  { echo '<button type="button" class="btn btn-warning btn-xs">completed</button> ';}
   echo $row[$name];
   if ($name = 'taskName')  {echo "</a>";}
   echo "</td>";
