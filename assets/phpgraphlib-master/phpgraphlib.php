@@ -7,8 +7,8 @@ PHPGraphLib Graphing Library
 The first version PHPGraphLib was written in 2007 by Elliott Brueggeman to
 deliver PHP generated graphs quickly and easily. It has grown in both features
 and maturity since its inception, but remains PHP 4.04+ compatible. Originally
-available only for paid commerial use, PHPGraphLib was open-sourced in 2013 
-under the MIT License. Please visit http://www.ebrueggeman.com/phpgraphlib 
+available only for paid commerial use, PHPGraphLib was open-sourced in 2013
+under the MIT License. Please visit http://www.ebrueggeman.com/phpgraphlib
 for more information.
 
 ---
@@ -56,7 +56,7 @@ class PHPGraphLib {
 	const DATA_VALUE_PADDING = 5;
 
 	//default margin % of width / height
-	const X_AXIS_MARGIN_PERCENT = 12;
+	const X_AXIS_MARGIN_PERCENT = 20; // was originally 12
 	const Y_AXIS_MARGIN_PERCENT = 8;
 
 	//controls auto-adjusting grid interval
@@ -72,7 +72,7 @@ class PHPGraphLib {
 	const MULTI_OFFSET_FIVE = 9;
 
 	//padding inside legend box
-	const LEGEND_PADDING = 4; 
+	const LEGEND_PADDING = 4;
 	const LEGEND_MAX_CHARS = 15;
 
 	//display default
@@ -97,7 +97,7 @@ class PHPGraphLib {
 	protected $bool_ignore_data_fit_errors = false;
 	protected $data_point_width = 6;
 	protected $x_axis_value_interval = false;
-	
+
 	//internal status vars
 	protected $data_set_count = 0;
 	protected $data_min = 0;
@@ -165,7 +165,7 @@ class PHPGraphLib {
 	protected $y_axis_y2;
 
 	//aka bottom margin
-	protected $x_axis_margin; 
+	protected $x_axis_margin;
 
 	//aka left margin
 	protected $y_axis_margin;
@@ -181,12 +181,12 @@ class PHPGraphLib {
 	protected $multi_bar_colors = array();
 
 	//percent color decrease for multiple datasets
-	protected $color_darken_factor = 30; 
+	protected $color_darken_factor = 30;
 
 	//legend variables
 	protected $bool_legend = false;
-	protected $legend_total_chars = array(); 
-	
+	protected $legend_total_chars = array();
+
 	protected $legend_width;
 	protected $legend_height;
 	protected $legend_x;
@@ -197,7 +197,7 @@ class PHPGraphLib {
 	protected $legend_swatch_outline_color;
 	protected $legend_titles = array();
 
-	public function __construct($width, $height, $output_file = null) 
+	public function __construct($width, $height, $output_file = null)
 	{
 		$this->width = $width;
 		$this->height = $height;
@@ -206,7 +206,7 @@ class PHPGraphLib {
 		$this->allocateColors();
 	}
 
-	protected function initialize() 
+	protected function initialize()
 	{
 		//header must be sent before any html or blank space output
 		if (!$this->output_file) {
@@ -217,50 +217,50 @@ class PHPGraphLib {
 			or die("Cannot Initialize new GD image stream - Check your PHP setup");
 	}
 
-	public function createGraph() 
+	public function createGraph()
 	{
 		//main class method - called last
 		//setup axis if not already setup by user
 		if ($this->bool_data){
 			$this->analyzeData();
-			if (!$this->bool_x_axis_setup) { 
-				$this->setupXAxis(); 
+			if (!$this->bool_x_axis_setup) {
+				$this->setupXAxis();
 			}
-			if (!$this->bool_y_axis_setup){ 
-				$this->setupYAxis(); 
+			if (!$this->bool_y_axis_setup){
+				$this->setupYAxis();
 			}
-			
+
 			//calculations
 			$this->calcTopMargin();
 			$this->calcRightMargin();
 			$this->calcCoords();
 			$this->setupData();
-			
+
 			//start creating actual image elements
-			if ($this->bool_background) { 
-				$this->generateBackgound(); 
+			if ($this->bool_background) {
+				$this->generateBackgound();
 			}
-			
+
 			//always gen grid values, even if not displayed
 			$this->setupGrid();
 
-			if ($this->bool_bars_generate) { 
-				$this->generateBars(); 
+			if ($this->bool_bars_generate) {
+				$this->generateBars();
 			}
 			if ($this->bool_data_points) {
-				$this->generateDataPoints(); 
+				$this->generateDataPoints();
 			}
-			if ($this->bool_legend) { 
-				$this->generateLegend(); 
+			if ($this->bool_legend) {
+				$this->generateLegend();
 			}
-			if ($this->bool_title) { 
-				$this->generateTitle(); 
+			if ($this->bool_title) {
+				$this->generateTitle();
 			}
-			if ($this->bool_x_axis) { 
-				$this->generateXAxis(); 
+			if ($this->bool_x_axis) {
+				$this->generateXAxis();
 			}
-			if ($this->bool_y_axis) { 
-				$this->generateYAxis(); 
+			if ($this->bool_y_axis) {
+				$this->generateYAxis();
 			}
 		} else {
 			$this->error[] = "No valid data added to graph. Add data with the addData() function.";
@@ -281,7 +281,7 @@ class PHPGraphLib {
 	protected function setupData()
 	{
 		$unit_width = ($this->width - $this->y_axis_margin - $this->right_margin) / (($this->data_count * 2) + $this->data_count);
-		if ($unit_width < 1 && !$this->bool_ignore_data_fit_errors) {	
+		if ($unit_width < 1 && !$this->bool_ignore_data_fit_errors) {
 			//error units too small, too many data points or not large enough graph
 			$this->bool_bars_generate = false;
 			$this->error[] = "Graph too small or too many data points.";
@@ -291,7 +291,7 @@ class PHPGraphLib {
 			$this->bar_width = 2 * $unit_width;
 			$this->space_width = $unit_width;
 			//now calculate height (scale) units
-			$availVertSpace = $this->height - $this->x_axis_margin - $this->top_margin;	
+			$availVertSpace = $this->height - $this->x_axis_margin - $this->top_margin;
 			if ($availVertSpace < 1) {
 				$this->bool_bars_generate = false;
 				$this->error[] = "Graph height not tall enough.";
@@ -300,11 +300,11 @@ class PHPGraphLib {
 				if ($this->bool_user_data_range) {
 					//if all zero data, set fake max and min to range boundaries
 					if ($this->all_zero_data) {
-						if ($this->data_range_min > $this->data_min) { 
-							$this->data_min = $this->data_range_min; 
+						if ($this->data_range_min > $this->data_min) {
+							$this->data_min = $this->data_range_min;
 						}
 						if ($this->data_range_max < $this->data_max) {
-							$this->data_max = $this->data_range_max; 
+							$this->data_max = $this->data_range_max;
 						}
 					}
 
@@ -327,12 +327,12 @@ class PHPGraphLib {
 					$graphBottomScale = ($this->data_min<0) ? $this->data_min : 0;
 					$graphTopScale = ($this->data_max<0) ? 0 : $this->data_max ;
 					$graphScaleRange = $graphTopScale - $graphBottomScale;
-					
+
 					//all data identical
 					if ($graphScaleRange == 0) {
 						$graphScaleRange = 100;
 					}
-					$this->unit_scale = $availVertSpace / $graphScaleRange;			
+					$this->unit_scale = $availVertSpace / $graphScaleRange;
 					//now adjust x axis in y value if negative values
 					if ($this->data_min < 0) {
 						$this->x_axis_y1 -= round($this->unit_scale * abs($this->data_min));
@@ -344,7 +344,7 @@ class PHPGraphLib {
 	}
 
 	//always port changes to generatebars() to extensions
-	protected function generateBars() 
+	protected function generateBars()
 	{
 		$this->finalizeColors();
 
@@ -360,20 +360,20 @@ class PHPGraphLib {
 		//set different offsets based on number of data sets
 		$dataset_offset = 0;
 		switch ($this->data_set_count) {
-			case 2: 
-				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_TWO / 100); 
+			case 2:
+				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_TWO / 100);
 				break;
-			case 3: 
-				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_THREE / 100); 
+			case 3:
+				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_THREE / 100);
 				break;
-			case 4: 
-				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_FOUR / 100); 
+			case 4:
+				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_FOUR / 100);
 				break;
-			case 5: 
-				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_FIVE / 100); 
+			case 5:
+				$dataset_offset = $this->bar_width * (self::MULTI_OFFSET_FIVE / 100);
 				break;
 		}
-		
+
 		foreach ($this->data_array as $data_set_num => $data_set) {
 			$lineX2 = null;
 			$xStart = $this->y_axis_x1 + ($this->space_width / 2);
@@ -384,7 +384,7 @@ class PHPGraphLib {
 				$x2 = round(($xStart + $this->bar_width) + ($dataset_offset * $data_set_num));
 				$y1 = round($this->x_axis_y1 - ($item * $this->unit_scale) + $adjustment);
 				$y2 = round($this->x_axis_y1);
-				
+
 				//if we are using a user specified data range, need to limit what's displayed
 				if ($this->bool_user_data_range) {
 					if ($item <= $this->data_range_min) {
@@ -393,10 +393,10 @@ class PHPGraphLib {
 						$hideBarOutline = true;
 					} elseif ($item >= $this->data_range_max) {
 						//display, but cut off display above range max
-						$y1 = $this->x_axis_y1 - ($this->actual_displayed_max_value * $this->unit_scale) + $adjustment;	
+						$y1 = $this->x_axis_y1 - ($this->actual_displayed_max_value * $this->unit_scale) + $adjustment;
 					}
-				}	
-				//draw bar 
+				}
+				//draw bar
 				if ($this->bool_bars) {
 					if ($this->bool_gradient) {
 						//draw gradient if desired
@@ -404,9 +404,9 @@ class PHPGraphLib {
 					} else {
 						imagefilledrectangle($this->image, $x1, $y1,$x2, $y2,  $this->multi_bar_colors[$data_set_num]);
 					}
-					//draw bar outline	
-					if ($this->bool_bar_outline && !$hideBarOutline) { 
-						imagerectangle($this->image, $x1, $y2, $x2, $y1, $this->outline_color); 
+					//draw bar outline
+					if ($this->bool_bar_outline && !$hideBarOutline) {
+						imagerectangle($this->image, $x1, $y2, $x2, $y1, $this->outline_color);
 					}
 				}
 				// draw line
@@ -420,7 +420,7 @@ class PHPGraphLib {
 					} else {
 						$lineX2 = $lineX1;
 						$lineY2 = $lineY1;
-					}	
+					}
 				}
 				// display data points
 				if ($this->bool_data_points) {
@@ -454,7 +454,7 @@ class PHPGraphLib {
 					$dataX -= ($this->data_additional_length * self::DATA_VALUE_TEXT_WIDTH) / 2;
 					imagestring($this->image, 2, $dataX, $dataY, $item,  $this->data_value_color);
 				}
-				//write x axis value 
+				//write x axis value
 				if ($this->bool_x_axis_values) {
 					if ($data_set_num == $this->data_set_count - 1) {
 						if ($this->bool_x_axis_values_vert) {
@@ -467,7 +467,7 @@ class PHPGraphLib {
 								$textVertPos = round($this->y_axis_y1 + (strlen($key) * self::TEXT_WIDTH) + self::AXIS_VALUE_PADDING);
 							}
 							$textHorizPos = round($xStart + ($this->bar_width / 2) - (self::TEXT_HEIGHT / 2));
-					
+
 							//skip and dispplay every x intervals
 							if ($this->x_axis_value_interval) {
 								if ($this->x_axis_value_interval_counter < $this->x_axis_value_interval) {
@@ -492,8 +492,8 @@ class PHPGraphLib {
 							}
 							//horizontal data keys
 							$textHorizPos = round($xStart + ($this->bar_width / 2) - ((strlen($key) * self::TEXT_WIDTH) / 2));
-							
-							
+
+
 							//skip and dispplay every x intervals
 							if ($this->x_axis_value_interval) {
 								if ($this->x_axis_value_interval_counter < $this->x_axis_value_interval) {
@@ -523,7 +523,7 @@ class PHPGraphLib {
 				while ($num_set < $this->data_set_count) {
 					$color_ref_1 = $this->multi_gradient_colors_1[$num_set - 1];
 					$color_ref_2 = $this->multi_gradient_colors_2[$num_set - 1];
-					$this->multi_gradient_colors_1[] = array( 
+					$this->multi_gradient_colors_1[] = array(
 						round($color_ref_1[0] * $color_darken_decimal),
 						round($color_ref_1[1] * $color_darken_decimal),
 						round($color_ref_1[2] * $color_darken_decimal));
@@ -532,7 +532,7 @@ class PHPGraphLib {
 						round($color_ref_2[1] * $color_darken_decimal),
 						round($color_ref_2[2] * $color_darken_decimal));
 					$num_set++;
-				}	
+				}
 			}
 			while (count($this->multi_gradient_colors_1) > $this->data_set_count) {
 				$temp = array_pop($this->multi_gradient_colors_1);
@@ -553,9 +553,9 @@ class PHPGraphLib {
 				$color_ref = $this->multi_bar_colors[$num_set - 1];
 				$color_parts = imagecolorsforindex($this->image, $color_ref);
 				$color_darken_decimal = (100 - $this->color_darken_factor) / 100;
-				$this->multi_bar_colors[$num_set] = imagecolorallocate($this->image, 
-					round($color_parts['red'] * $color_darken_decimal), 
-					round($color_parts['green'] * $color_darken_decimal), 
+				$this->multi_bar_colors[$num_set] = imagecolorallocate($this->image,
+					round($color_parts['red'] * $color_darken_decimal),
+					round($color_parts['green'] * $color_darken_decimal),
 					round($color_parts['blue'] * $color_darken_decimal));
 				$num_set++;
 			}
@@ -576,9 +576,9 @@ class PHPGraphLib {
 					$color_ref = $this->line_color[$num_set - 1];
 					$color_parts = imagecolorsforindex($this->image, $color_ref);
 					$color_darken_decimal = (100 - $this->color_darken_factor) / 100;
-					$this->line_color[$num_set] = imagecolorallocate($this->image, 
-						round($color_parts['red'] * $color_darken_decimal), 
-						round($color_parts['green'] * $color_darken_decimal), 
+					$this->line_color[$num_set] = imagecolorallocate($this->image,
+						round($color_parts['red'] * $color_darken_decimal),
+						round($color_parts['green'] * $color_darken_decimal),
 						round($color_parts['blue'] * $color_darken_decimal));
 					$num_set++;
 				}
@@ -593,10 +593,10 @@ class PHPGraphLib {
 				$temp = array_pop($this->line_color);
 			}
 			$this->line_color = array_reverse($this->line_color);
-		}	
+		}
 	}
 
-	protected function drawGradientBar($x1, $y1, $x2, $y2, $colorArr1, $colorArr2, $data_set_num) 
+	protected function drawGradientBar($x1, $y1, $x2, $y2, $colorArr1, $colorArr2, $data_set_num)
 	{
 		if (!isset($this->bool_gradient_colors_found[$data_set_num]) || $this->bool_gradient_colors_found[$data_set_num] == false) {
 			$this->gradient_handicap[$data_set_num] = 0;
@@ -627,17 +627,17 @@ class PHPGraphLib {
 				if ($adjusted_index < 0) {
 					$adjusted_index = 0;
 				}
-				imageline($this->image, $x1+$i, $y1, $x1 + $i, $y2, $this->gradient_color_array[$data_set_num][$adjusted_index]);		
+				imageline($this->image, $x1+$i, $y1, $x1 + $i, $y2, $this->gradient_color_array[$data_set_num][$adjusted_index]);
 			}
 		} else {
 			//normal gradients with colors < self::GRADIENT_MAX_COLORS
 			for ($i = 0; $i < $numLines; $i++) {
-				imageline($this->image, $x1+$i, $y1, $x1+$i, $y2, $this->gradient_color_array[$data_set_num][$i]);		
+				imageline($this->image, $x1+$i, $y1, $x1+$i, $y2, $this->gradient_color_array[$data_set_num][$i]);
 			}
 		}
 	}
 
-	protected function setupGrid() 
+	protected function setupGrid()
 	{
 		//adjustment for when user sets their data display range
 		$adjustment = 0;
@@ -651,7 +651,7 @@ class PHPGraphLib {
 		$this->generateGoalLines($adjustment);
 	}
 
-	protected function calculateGridHoriz($adjustment = 0) 
+	protected function calculateGridHoriz($adjustment = 0)
 	{
 		//determine horizontal grid lines
 		$horizGridArray = array();
@@ -661,7 +661,7 @@ class PHPGraphLib {
 		//use our function to determine ideal y axis scale interval
 		$intervalFromZero = $this->determineAxisMarkerScale($this->data_max, $this->data_min);
 
-		//if we have positive values, add grid values to array 
+		//if we have positive values, add grid values to array
 		//until we reach the max needed (we will go 1 over)
 		$cur = $min;
 		while ($cur < $this->data_max) {
@@ -669,7 +669,7 @@ class PHPGraphLib {
 			$horizGridArray[] = $cur;
 		}
 
-		//if we have negative values, add grid values to array 
+		//if we have negative values, add grid values to array
 		//until we reach the min needed (we will go 1 over)
 		$cur = $min;
 		while ($cur > $this->data_min) {
@@ -680,14 +680,14 @@ class PHPGraphLib {
 		//sort needed b/c we will use last value later (max)
 		sort($horizGridArray);
 		$this->actual_displayed_max_value = $horizGridArray[count($horizGridArray) - 1];
-		$this->actual_displayed_min_value = $horizGridArray[0];	
+		$this->actual_displayed_min_value = $horizGridArray[0];
 
 		//loop through each horizontal line
 		foreach ($horizGridArray as $value) {
 			$yValue = round($this->x_axis_y1 - ($value * $this->unit_scale) + $adjustment);
 			if ($this->bool_grid) {
 				//imageline($this->image, $this->y_axis_x1, $yValue, $this->x_axis_x2 , $yValue, $this->grid_color);
-				$this->horiz_grid_lines[] = array('x1' => $this->y_axis_x1, 'y1' => $yValue, 
+				$this->horiz_grid_lines[] = array('x1' => $this->y_axis_x1, 'y1' => $yValue,
 					'x2' => $this->x_axis_x2, 'y2' => $yValue, 'color' => $this->grid_color);
 			}
 			//display value on y axis if desired using calc'd grid values
@@ -724,19 +724,19 @@ class PHPGraphLib {
 		for ($i = 1; $i < $vertGrids; $i++) {
 			$vertGridArray[] = $this->y_axis_x1 + ($interval * $i);
 		}
-		
+
 		//loop through each vertical line
 		if ($this->bool_grid) {
 			$xValue = $this->y_axis_y1;
 			foreach ($vertGridArray as $value) {
 				//imageline($this->image, $value, $this->y_axis_y2, $value, $xValue , $this->grid_color);
-				$this->vert_grid_lines[] = array('x1' => $value, 'y1' => $this->y_axis_y2, 
+				$this->vert_grid_lines[] = array('x1' => $value, 'y1' => $this->y_axis_y2,
 					'x2' => $value, 'y2' => $xValue, 'color' => $this->grid_color);
 			}
 		}
 	}
 
-	protected function imagelinedashed(&$image_handle, $x_axis_x1, $yLocation, $x_axis_x2 , $yLocation, $color) 
+	protected function imagelinedashed(&$image_handle, $x_axis_x1, $yLocation, $x_axis_x2 , $yLocation, $color)
 	{
 		$step  = 3;
 		for ($i = $x_axis_x1; $i < $x_axis_x2 -1; $i += ($step*2)) {
@@ -744,7 +744,7 @@ class PHPGraphLib {
 		}
 	}
 
-	protected function generateGrids() 
+	protected function generateGrids()
 	{
 		//loop through and display values
 		foreach ($this->horiz_grid_lines as $line) {
@@ -762,7 +762,7 @@ class PHPGraphLib {
 		}
 	}
 
-	protected function generateGoalLines($adjustment = 0) 
+	protected function generateGoalLines($adjustment = 0)
 	{
 		//draw goal lines if present (after grid) - doesn't get executed if array empty
 		foreach ($this->goal_line_array as $goal_line_data) {
@@ -780,29 +780,29 @@ class PHPGraphLib {
 		}
 	}
 
-	protected function generateDataPoints() 
+	protected function generateDataPoints()
 	{
 		foreach ($this->data_point_array as $pointArray) {
 			imagefilledellipse($this->image, $pointArray[0], $pointArray[1], $this->data_point_width, $this->data_point_width, $this->data_point_color);
-		}		
+		}
 	}
 
-	protected function generateXAxis() 
+	protected function generateXAxis()
 	{
 		imageline($this->image, $this->x_axis_x1, $this->x_axis_y1, $this->x_axis_x2, $this->x_axis_y2, $this->x_axis_color);
 	}
 
-	protected function generateYAxis() 
+	protected function generateYAxis()
 	{
 		imageline($this->image, $this->y_axis_x1, $this->y_axis_y1, $this->y_axis_x2, $this->y_axis_y2, $this->y_axis_color);
 	}
 
-	protected function generateBackgound() 
+	protected function generateBackgound()
 	{
 		imagefilledrectangle($this->image, 0, 0, $this->width, $this->height, $this->background_color);
 	}
 
-	protected function generateTitle() 
+	protected function generateTitle()
 	{
 		//spacing may have changed since earlier
 		//use top margin or grid top y, whichever less
@@ -822,7 +822,7 @@ class PHPGraphLib {
 		imagestring($this->image, 2, $title_x , $title_y , $this->title_text,  $this->title_color);
 	}
 
-	protected function calcTopMargin() 
+	protected function calcTopMargin()
 	{
 		if ($this->bool_title) {
 			//include space for title, approx margin + 3*title height
@@ -830,16 +830,16 @@ class PHPGraphLib {
 		} else {
 			//just use default spacing
 			$this->top_margin = $this->height * (self::X_AXIS_MARGIN_PERCENT / 100);
-		}	
+		}
 	}
 
-	protected function calcRightMargin() 
+	protected function calcRightMargin()
 	{
 		//just use default spacing
 		$this->right_margin = $this->width * (self::Y_AXIS_MARGIN_PERCENT / 100);
 	}
 
-	protected function calcCoords() 
+	protected function calcCoords()
 	{
 		//calculate axis points, also used for other calculations
 		$this->x_axis_x1 = $this->y_axis_margin;
@@ -851,18 +851,18 @@ class PHPGraphLib {
 		$this->y_axis_x2 = $this->y_axis_margin;
 		$this->y_axis_y2 = $this->top_margin;
 	}
-	
-	protected function determineAxisMarkerScale($max, $min, $axis = 'y') 
+
+	protected function determineAxisMarkerScale($max, $min, $axis = 'y')
 	{
 		switch ($axis) {
-			case 'y' : 
-				$space = $this->height; 
+			case 'y' :
+				$space = $this->height;
 				break;
-			case 'x' : 
-				$space = $this->width; 
+			case 'x' :
+				$space = $this->width;
 				break;
 		}
-	
+
 		//for calclation, take range or max-0
 		if ($this->bool_user_data_range) {
 			$range = abs($max - $min);
@@ -892,12 +892,12 @@ class PHPGraphLib {
 		for ($i = 0; $i < $count; $i++) {
 			$result /= 10;
 		}
-		return $result;	
+		return $result;
 	}
-	
-	protected function roundUpSameDigits($num) 
-	{           
-		$len = strlen($num);  
+
+	protected function roundUpSameDigits($num)
+	{
+		$len = strlen($num);
 		if (round($num, -1 * ($len - 1)) == $num) {
 			//we already have a sig number
 			return $num;
@@ -912,18 +912,18 @@ class PHPGraphLib {
 		}
 	}
 
-	protected function roundUpOneExtraDigit($num) 
-	{                     
-		$len = strlen($num);  
+	protected function roundUpOneExtraDigit($num)
+	{
+		$len = strlen($num);
 		$firstDig = substr($num, 0, 1);
 		$rest = substr($num, 1);
 		$firstDig = 5;
 		$altered = $firstDig . $rest;
 		//after reassembly, round up to next sig number, one extra # of digits
-		return round((int)$altered, -1 * ($len)); 
+		return round((int)$altered, -1 * ($len));
 	}
 
-	protected function displayErrors() 
+	protected function displayErrors()
 	{
 		if (count($this->error) > 0) {
 			$lineHeight = 12;
@@ -932,15 +932,15 @@ class PHPGraphLib {
 			imagefilledrectangle($this->image, 0, 0, $this->width - 1, 2 * $lineHeight,  $errorBackColor);
 			imagestring($this->image, 3, 2, 0, "!!----- PHPGraphLib Error -----!!",  $errorColor);
 			foreach($this->error as $key => $errorText) {
-				imagefilledrectangle($this->image, 0, ($key * $lineHeight) + $lineHeight, $this->width - 1, ($key * $lineHeight) + 2 * $lineHeight,  $errorBackColor);	
-				imagestring($this->image, 2, 2, ($key * $lineHeight) + $lineHeight, "[". ($key + 1) . "] ". $errorText,  $errorColor);	
+				imagefilledrectangle($this->image, 0, ($key * $lineHeight) + $lineHeight, $this->width - 1, ($key * $lineHeight) + 2 * $lineHeight,  $errorBackColor);
+				imagestring($this->image, 2, 2, ($key * $lineHeight) + $lineHeight, "[". ($key + 1) . "] ". $errorText,  $errorColor);
 			}
 			$errorOutlineColor = imagecolorallocate($this->image, 255, 0, 0);
-			imagerectangle($this->image, 0, 0, $this->width-1,($key * $lineHeight) + 2 * $lineHeight,  $errorOutlineColor);		
+			imagerectangle($this->image, 0, 0, $this->width-1,($key * $lineHeight) + 2 * $lineHeight,  $errorOutlineColor);
 		}
 	}
 
-	public function addData($data, $data2 = '', $data3 = '', $data4 = '', $data5 = '') 
+	public function addData($data, $data2 = '', $data3 = '', $data4 = '', $data5 = '')
 	{
 		$data_sets = array($data, $data2, $data3, $data4, $data5);
 
@@ -957,11 +957,11 @@ class PHPGraphLib {
 					unset($this->data_array[$data_set_num][$key]);
 					continue;
 				}
-				if ($item < $this->data_min) { 
+				if ($item < $this->data_min) {
 					$this->data_min = $item;
 				}
-				if ($item > $this->data_max) { 
-					$this->data_max = $item; 
+				if ($item > $this->data_max) {
+					$this->data_max = $item;
 				}
 			}
 			//find the count of the dataset with the most data points
@@ -977,11 +977,11 @@ class PHPGraphLib {
 			$this->error[] = "No valid datasets added in adddata() function.";
 			return;
 		}
-		
+
 		$this->bool_data = true;
 	}
 
-	protected function analyzeData() 
+	protected function analyzeData()
 	{
 		if ($this->data_min >= 0) {
 			$this->bool_all_positive = true;
@@ -993,10 +993,10 @@ class PHPGraphLib {
 			$this->data_min = 0;
 			$this->data_max = 10;
 			$this->all_zero_data = true;
-		} 
+		}
 	}
 
-	public function setupXAxis($percent = '', $color = '') 
+	public function setupXAxis($percent = '', $color = '')
 	{
 		$this->bool_x_axis_setup = true;
 		if ($percent === false) {
@@ -1007,16 +1007,16 @@ class PHPGraphLib {
 		if (!empty($color) && $arr = $this->returnColorArray($color)) {
 			$this->x_axis_color = imagecolorallocate($this->image, $arr[0], $arr[1], $arr[2]);
 		}
-		if (is_numeric($percent) && $percent > 0) { 
+		if (is_numeric($percent) && $percent > 0) {
 			$percent = $percent / 100;
 			$this->x_axis_margin = round($this->height * $percent);
 		} else {
 			$percent = self::X_AXIS_MARGIN_PERCENT / 100;
 			$this->x_axis_margin = round($this->height * $percent);
-		}	
+		}
 	}
 
-	public function setupYAxis($percent = '', $color = '') 
+	public function setupYAxis($percent = '', $color = '')
 	{
 		$this->bool_y_axis_setup = true;
 		if ($percent === false) {
@@ -1027,7 +1027,7 @@ class PHPGraphLib {
 		if (!empty($color) && $arr = $this->returnColorArray($color)) {
 			$this->y_axis_color = imagecolorallocate($this->image, $arr[0], $arr[1], $arr[2]);
 		}
-		if (is_numeric($percent) && $percent > 0) { 
+		if (is_numeric($percent) && $percent > 0) {
 			$this->y_axis_margin = round($this->width * ($percent / 100));
 		} else {
 			$percent = self::Y_AXIS_MARGIN_PERCENT / 100;
@@ -1035,7 +1035,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setRange($min, $max) 
+	public function setRange($min, $max)
 	{
 		//because of deprecated use of this function as($max, $min)
 		if ($min > $max) {
@@ -1048,82 +1048,82 @@ class PHPGraphLib {
 		$this->bool_user_data_range = true;
 	}
 
-	public function setTitle($title) 
+	public function setTitle($title)
 	{
 		if (!empty($title)) {
 			$this->title_text = $title;
 			$this->bool_title = true;
-		} else { 
-			$this->error[] = "String arg for setTitle() not specified properly."; 
-		}	
+		} else {
+			$this->error[] = "String arg for setTitle() not specified properly.";
+		}
 	}
 
-	public function setTitleLocation($location) 
+	public function setTitleLocation($location)
 	{
 		$this->bool_title_left = false;
 		$this->bool_title_right = false;
 		$this->bool_title_center = false;
 		switch (strtolower($location)) {
-			case 'left': 
+			case 'left':
 				$this->bool_title_left = true;
 				break;
-			case 'right': 
+			case 'right':
 				$this->bool_title_right = true;
 				break;
 			case 'center':
 				$this->bool_title_center = true;
 				break;
-			default: 
+			default:
 				$this->error[] = "String arg for setTitleLocation() not specified properly.";
-		}	
+		}
 	}
 
-	public function setBars($bool) 
+	public function setBars($bool)
 	{
-		if (is_bool($bool)) { 
+		if (is_bool($bool)) {
 			$this->bool_bars = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setBars() not specified properly.";
 		}
 	}
 
-	public function setGrid($bool) 
+	public function setGrid($bool)
 	{
-		if (is_bool($bool)) { 
+		if (is_bool($bool)) {
 			$this->bool_grid = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setGrid() not specified properly.";
 		}
 	}
 
-	public function setXValues($bool) 
+	public function setXValues($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_x_axis_values = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setXValues() not specified properly.";
 		}
 	}
 
-	public function setYValues($bool) 
+	public function setYValues($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_y_axis_values = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setYValues() not specified properly.";
 		}
 	}
 
-	public function setXValuesHorizontal($bool) 
+	public function setXValuesHorizontal($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_x_axis_values_vert = !$bool;
 		} else {
-			$this->error[] = "Boolean arg for setXValuesHorizontal() not specified properly."; 
+			$this->error[] = "Boolean arg for setXValuesHorizontal() not specified properly.";
 		}
 	}
 
-	public function setXValuesVertical($bool) 
+	public function setXValuesVertical($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_x_axis_values_vert = $bool;
@@ -1132,7 +1132,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setXValuesInterval($value) 
+	public function setXValuesInterval($value)
 	{
 		if (is_int($value) && $value > 0) {
 			$this->x_axis_value_interval = $value;
@@ -1141,7 +1141,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setBarOutline($bool) 
+	public function setBarOutline($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_bar_outline = $bool;
@@ -1150,7 +1150,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setDataPoints($bool) 
+	public function setDataPoints($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_data_points = $bool;
@@ -1159,7 +1159,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setDataPointSize($size) 
+	public function setDataPointSize($size)
 	{
 		if (is_numeric($size)) {
 			$this->data_point_width = $size;
@@ -1168,7 +1168,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setDataValues($bool) 
+	public function setDataValues($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_data_values = $bool;
@@ -1182,9 +1182,9 @@ class PHPGraphLib {
         {
             switch (strtolower($currency_type)) {
                 case 'dollar': $this->data_currency = '$'; break;
-                case 'yen': $this->data_currency = '¥'; break;
-                case 'pound': $this->data_currency = '£'; break;
-                case 'lira': $this->data_currency = '£'; break;
+                case 'yen': $this->data_currency = 'ï¿½'; break;
+                case 'pound': $this->data_currency = 'ï¿½'; break;
+                case 'lira': $this->data_currency = 'ï¿½'; break;
                 // Euro doesn't display properly
                 // Franc doesn't display properly
                 default: $this->data_currency = $currency_type; break;
@@ -1207,15 +1207,15 @@ class PHPGraphLib {
 				break;
 			case 'percent':
 				$this->data_format_array[] = 'formatDataAsPercent';
-				$this->data_additional_length++; 
+				$this->data_additional_length++;
 				break;
 			case 'degrees':
 				$this->data_format_array[] = 'formatDataAsDegrees';
-				$this->data_additional_length++; 
+				$this->data_additional_length++;
 				break;
-			default: 
+			default:
 				$this->data_format_array[] = 'formatDataAsGeneric';
-				$this->data_format_generic = $format; 
+				$this->data_format_generic = $format;
 				$this->data_additional_length += strlen($format);
 				break;
 		}
@@ -1252,7 +1252,7 @@ class PHPGraphLib {
 		//turn data into format 12,234...
 		$parts = '';
 		while (strlen($input)>3) {
-			$parts = ',' . substr($input, -3) . $parts;	
+			$parts = ',' . substr($input, -3) . $parts;
 			$input = substr($input, 0, strlen($input) - 3);
 		}
 		return $sign_part . $currency_part . $input . $parts . $decimal_part;
@@ -1265,7 +1265,7 @@ class PHPGraphLib {
 
 	protected function formatDataAsDegrees($input)
 	{
-		return $input . '°';
+		return $input . 'ï¿½';
 	}
 
 	protected function formatDataAsGeneric($input)
@@ -1275,9 +1275,9 @@ class PHPGraphLib {
 
 	public function setLine($bool)
 	{
-		if (is_bool($bool)) { 
+		if (is_bool($bool)) {
 			$this->bool_line = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setLine() not specified properly.";
 		}
 	}
@@ -1286,13 +1286,13 @@ class PHPGraphLib {
 	{
 		if (is_numeric($yValue)) {
 		    if ($color) {
-				$this->setGenericColor($color, '$this->goal_line_custom_color', "Goal line color not specified properly.");	
+				$this->setGenericColor($color, '$this->goal_line_custom_color', "Goal line color not specified properly.");
 				$color = $this->goal_line_custom_color;
 			}
-		
+
 			$this->goal_line_array[] = array(
-				'yValue' => $yValue, 
-				'color' => $color, 
+				'yValue' => $yValue,
+				'color' => $color,
 				'style' => $style
 			);
 		}
@@ -1301,7 +1301,7 @@ class PHPGraphLib {
 		}
 	}
 
-	protected function allocateColors() 
+	protected function allocateColors()
 	{
 		$this->background_color = imagecolorallocate($this->image, 255, 255, 255);
 		$this->grid_color = imagecolorallocate($this->image, 220, 220, 220);
@@ -1322,12 +1322,12 @@ class PHPGraphLib {
 		$this->legend_swatch_outline_color = $this->line_color_default;
 	}
 
-	protected function returnColorArray($color) 
+	protected function returnColorArray($color)
 	{
 		//check to see if color passed through in form '128,128,128' or hex format
 		if (strpos($color,',') !== false) {
 			return explode(',', $color);
-		} elseif (substr($color, 0, 1) == '#') {	
+		} elseif (substr($color, 0, 1) == '#') {
 			if (strlen($color) == 7) {
 				$hex1 = hexdec(substr($color, 1, 2));
 				$hex2 = hexdec(substr($color, 3, 2));
@@ -1338,7 +1338,7 @@ class PHPGraphLib {
 				$hex2 = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
 				$hex3 = hexdec(substr($color, 3, 1) . substr($color, 3, 1));
 				return array($hex1, $hex2, $hex3);
-			}			
+			}
 		}
 
 		switch (strtolower($color)) {
@@ -1355,10 +1355,10 @@ class PHPGraphLib {
 			case 'lime':   return array(0,255,0); break;
 			case 'olive':  return array(128,128,0); break;
 			case 'yellow': return array(255,255,0); break;
-			case 'navy':   return array(0,0,128); break;	
+			case 'navy':   return array(0,0,128); break;
 			case 'blue':   return array(0,0,255); break;
 			case 'teal':   return array(0,128,128); break;
-			case 'aqua':   return array(0,255,255); break;	
+			case 'aqua':   return array(0,255,255); break;
 		}
 
 		$this->error[] = "Color name \"$color\" not recogized.";
@@ -1380,7 +1380,7 @@ class PHPGraphLib {
 		//can be used for most color setting options
 		if (!empty($inputColor) && ($arr = $this->returnColorArray($inputColor))) {
 			eval($var . ' = imagecolorallocate($this->image, $arr[0], $arr[1], $arr[2]);');
-			return true;	
+			return true;
 		}
 		else {
 			$this->error[] = $errorMsg;
@@ -1388,7 +1388,7 @@ class PHPGraphLib {
 		}
 	}
 
-	public function setBackgroundColor($color) 
+	public function setBackgroundColor($color)
 	{
 		if ($this->setGenericColor($color, '$this->background_color', "Background color not specified properly.")) {
 			$this->bool_background = true;
@@ -1406,12 +1406,12 @@ class PHPGraphLib {
 		$this->setGenericColor($color, '$this->y_axis_text_color', "Y axis Text color not specified properly.");
 	}
 
-	public function setXAxisTextColor($color) 
+	public function setXAxisTextColor($color)
 	{
 		$this->setGenericColor($color, '$this->x_axis_text_color', "X axis text color not specified properly.");
 	}
 
-	public function setYAxisTextColor($color) 
+	public function setYAxisTextColor($color)
 	{
 		$this->setGenericColor($color, '$this->y_axis_text_color', "Y axis Text color not specified properly.");
 	}
@@ -1461,7 +1461,7 @@ class PHPGraphLib {
 		$this->setGenericColor($color, '$this->goal_line_color', "Goal line color not specified properly.");
 	}
 
-	public function setGradient($color1, $color2, $color3 = '', $color4 = '', $color5 = '', $color6 = '', $color7 = '', $color8 = '', $color9 = '', $color10 = '') 
+	public function setGradient($color1, $color2, $color3 = '', $color4 = '', $color5 = '', $color6 = '', $color7 = '', $color8 = '', $color9 = '', $color10 = '')
 	{
 		if (!empty($color1) && !empty($color2) && ($arr1 = $this->returnColorArray($color1)) && ($arr2 = $this->returnColorArray($color2))) {
 			$this->bool_gradient = true;
@@ -1498,24 +1498,24 @@ class PHPGraphLib {
 	//Legend Related Functions
 	public function setLegend($bool)
 	{
-		if (is_bool($bool)) { 
+		if (is_bool($bool)) {
 			$this->bool_legend = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setLegend() not specified properly.";
 		}
 	}
 
-	public function setLegendColor($color) 
+	public function setLegendColor($color)
 	{
 		$this->setGenericColor($color, '$this->legend_color', "Legend color not specified properly.");
 	}
 
-	public function setLegendTextColor($color) 
+	public function setLegendTextColor($color)
 	{
 		$this->setGenericColor($color, '$this->legend_text_color', "Legend text color not specified properly.");
 	}
 
-	public function setLegendOutlineColor($color) 
+	public function setLegendOutlineColor($color)
 	{
 		$this->setGenericColor($color, '$this->legend_outline_color', "Legend outline color not specified properly.");
 	}
@@ -1530,7 +1530,7 @@ class PHPGraphLib {
 		$title_array = array($title1, $title2, $title3, $title4, $title5);
 		foreach ($title_array as $title) {
 			if ($len = strlen($title)) {
-				if ($len > self::LEGEND_MAX_CHARS) { 
+				if ($len > self::LEGEND_MAX_CHARS) {
 					$title = substr($title, 0, self::LEGEND_MAX_CHARS);
 					$this->legend_total_chars[] = self::LEGEND_MAX_CHARS;
 				} else {
@@ -1553,7 +1553,7 @@ class PHPGraphLib {
 			//could have more titles than data sets - check for this
 			if (isset($this->legend_total_chars[$i])){ $totalChars += $this->legend_total_chars[$i]; }
 		}
-		$this->legend_width = $totalChars * self::LEGEND_TEXT_WIDTH + (self::LEGEND_PADDING * 2.2) + 
+		$this->legend_width = $totalChars * self::LEGEND_TEXT_WIDTH + (self::LEGEND_PADDING * 2.2) +
 			($this->data_set_count * ($swatchSize + (self::LEGEND_PADDING * 2)));
 		$this->legend_x = $this->x_axis_x2 - $this->legend_width;
 		$highestElement = ($this->top_margin < $this->y_axis_y2) ? $this->top_margin : $this->y_axis_y2;
@@ -1587,17 +1587,17 @@ class PHPGraphLib {
 				$color = $this->line_color[$this->data_set_count - $i - 1];
 			}
 			imagefilledrectangle($this->image, $xValue, $yValue + $swatchToTextOffset, $xValue + $swatchSize, $yValue + $swatchToTextOffset + $swatchSize, $color);
-			imagerectangle($this->image, $xValue, $yValue + $swatchToTextOffset, $xValue + $swatchSize, $yValue + $swatchToTextOffset + $swatchSize, $this->legend_swatch_outline_color);	
+			imagerectangle($this->image, $xValue, $yValue + $swatchToTextOffset, $xValue + $swatchSize, $yValue + $swatchToTextOffset + $swatchSize, $this->legend_swatch_outline_color);
 			imagestring($this->image, 2, $xValue + (2 * self::LEGEND_PADDING + 2), $yValue, $data_label, $this->legend_text_color);
 		}
 	}
 
-	public function setIgnoreDataFitErrors($bool) 
+	public function setIgnoreDataFitErrors($bool)
 	{
 		if (is_bool($bool)) {
 			$this->bool_ignore_data_fit_errors = $bool;
-		} else { 
+		} else {
 			$this->error[] = "Boolean arg for setIgnoreDataFitErrors() not specified properly.";
-		}	
+		}
 	}
 }
