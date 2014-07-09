@@ -26,10 +26,10 @@ $prev_year = getDate(mktime(0,0,0,$cMonth,1,$cYear-1));
 $prev_year_text = $cYear-1;
 
 $today_timestamp = mktime(0,0,0,date("n"),date("d"),date("Y"));  // 1st day of display month
-$today_month = date('m',$today_timestamp);
 
 $timestamp = mktime(0,0,0,$cMonth,1,$cYear);  // 1st day of display month
 $maxday = date("t",$timestamp);  // total days in month
+$today_month = date('m',$timestamp);
 
 $thismonth = getdate ($timestamp);
 $startday = $thismonth['wday'];  //  0 is Sunday thru 6 is Saturday
